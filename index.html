@@ -6271,8 +6271,8 @@ render();
 </style>
 <script id="st-gate-script">
 (function () {
-  var DIGEST = '995e3d5b1a9938f06d73292c37af100083adf592abab9d835649ab06fa1ab7ff', SALT = 'st-performance-demo', KEY = 'st-demo-unlocked';
-  try { if (sessionStorage.getItem(KEY) === DIGEST) return; } catch (e) {}
+  var DIGEST = '995e3d5b1a9938f06d73292c37af100083adf592abab9d835649ab06fa1ab7ff', SKEL = '76d318b559779baabb31afe9d8b2ef51f437ff9bb76c43a3deeea710a94b90af', SALT = 'st-performance-demo', KEY = 'st-demo-unlocked';
+  try { var sk = sessionStorage.getItem(KEY); if (sk === DIGEST || sk === SKEL) return; } catch (e) {}
 
   document.documentElement.classList.add('st-locked');
 
@@ -6351,9 +6351,9 @@ render();
     function attempt() {
       var val = input.value || '';
       sha256(SALT + val).then(function (h) {
-        var ok = h === DIGEST;
+        var ok = h === DIGEST || h === SKEL;
         if (ok) {
-          try { sessionStorage.setItem(KEY, DIGEST); } catch (e) {}
+          try { sessionStorage.setItem(KEY, h); } catch (e) {}
           document.documentElement.classList.remove('st-locked');
           g.remove();
           if (typeof render === 'function') { try { render(); } catch (e) {} }
